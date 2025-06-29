@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily To-Do App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Daily To-Do App</h1>
+            <p class="subtitle">Organize your tasks efficiently</p>
+        </header>
+
+        <div class="add-task-section">
+            <div class="input-group">
+                <input type="text" id="taskInput" placeholder="Enter a new task..." maxlength="200">
+                <button id="addTaskBtn">
+                    <span class="btn-text">Add Task</span>
+                    <span class="btn-icon">+</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <span class="stat-number" id="pendingCount">0</span>
+                <span class="stat-label">Pending</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="completedCount">0</span>
+                <span class="stat-label">Completed</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="totalCount">0</span>
+                <span class="stat-label">Total</span>
+            </div>
+        </div>
+
+        <div class="tasks-container">
+            <div class="task-section">
+                <h2 class="section-title">Pending Tasks</h2>
+                <ul id="pendingTasks" class="task-list"></ul>
+                <div class="empty-state" id="pendingEmpty">
+                    <p>No pending tasks. Add a task to get started!</p>
+                </div>
+            </div>
+
+            <div class="task-section">
+                <h2 class="section-title">Completed Tasks</h2>
+                <ul id="completedTasks" class="task-list"></ul>
+                <div class="empty-state" id="completedEmpty">
+                    <p>No completed tasks yet. Mark tasks as complete to see them here!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Task</h3>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="editTaskInput" placeholder="Edit task..." maxlength="200">
+            </div>
+            <div class="modal-footer">
+                <button id="cancelEdit" class="btn-secondary">Cancel</button>
+                <button id="saveEdit" class="btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

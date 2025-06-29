@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .switch-link {
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+        }
+
+        .switch-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .switch-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        .success {
+            color: #27ae60;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .dashboard {
+            text-align: center;
+        }
+
+        .welcome-message {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            margin-top: 1rem;
+        }
+
+        .logout-btn:hover {
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="loginForm" class="container">
+        <h2>Login</h2>
+        <form id="loginFormElement">
+            <div class="form-group">
+                <label for="loginEmail">Email:</label>
+                <input type="email" id="loginEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <div id="loginError" class="error"></div>
+        </form>
+        <div class="switch-link">
+            Don't have an account? <a href="#" id="showRegister">Register here</a>
+        </div>
+    </div>
+
+    <!-- Registration Form -->
+    <div id="registerForm" class="container hidden">
+        <h2>Register</h2>
+        <form id="registerFormElement">
+            <div class="form-group">
+                <label for="registerName">Full Name:</label>
+                <input type="text" id="registerName" required>
+            </div>
+            <div class="form-group">
+                <label for="registerEmail">Email:</label>
+                <input type="email" id="registerEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Password:</label>
+                <input type="password" id="registerPassword" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" required minlength="6">
+            </div>
+            <button type="submit" class="btn">Register</button>
+            <div id="registerError" class="error"></div>
+            <div id="registerSuccess" class="success"></div>
+        </form>
+        <div class="switch-link">
+            Already have an account? <a href="#" id="showLogin">Login here</a>
+        </div>
+    </div>
+
+    <!-- Dashboard (Secured Page) -->
+    <div id="dashboard" class="container hidden">
+        <div class="dashboard">
+            <h2>Dashboard</h2>
+            <div class="welcome-message">Welcome to your secured area!</div>
+            <div class="user-info">
+                <h3>User Information</h3>
+                <p><strong>Name:</strong> <span id="userName"></span></p>
+                <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                <p><strong>Member since:</strong> <span id="memberSince"></span></p>
+            </div>
+            <div>
+                <p>🎉 Congratulations! You have successfully accessed the secured page.</p>
+                <p>This area is only accessible to authenticated users.</p>
+            </div>
+            <button class="btn logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        class AuthSystem {
+            constructor() {
+                this.users = this.loadUsers();
+                this.currentUser = this.loadCurrentUser();
+                this.initializeEventListeners();
+                this.checkAuthStatus();
+            }
+
+            // Load users from memory (simulating a database)
+            loadUsers() {
+                const users = {};
+                // Add a demo user for testing
+                users['demo@example.com'] = {
+                    name: 'Demo User',
+                    email: 'demo@example.com',
+                    password: 'demo123',
+                    registeredAt: new Date().toISOString()
+                };
+                return users;
+            }
+
+            // Load current user session
+            loadCurrentUser() {
+                return null; // No persistent storage
+            }
+
+            // Save current user session
+            saveCurrentUser(user) {
+                this.currentUser = user;
+            }
+
+            // Initialize event listeners
+            initializeEventListeners() {
+                // Form submissions
+                document.getElementById('loginFormElement').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleLogin();
+                });
+
+                document.getElementById('registerFormElement').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleRegister();
+                });
+
+                // Form switching
+                document.getElementById('showRegister').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.showRegisterForm();
+                });
+
+                document.getElementById('showLogin').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.showLoginForm();
+                });
+
+                // Logout
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    this.handleLogout();
+                });
+            }
+
+            // Handle user login
+            handleLogin() {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                const errorElement = document.getElementById('loginError');
+
+                // Clear previous errors
+                errorElement.textContent = '';
+
+                // Validate credentials
+                const user = this.users[email];
+                if (!user || user.password !== password) {
+                    errorElement.textContent = 'Invalid email or password';
+                    return;
+                }
+
+                // Successful login
+                this.saveCurrentUser(user);
+                this.showDashboard();
+            }
+
+            // Handle user registration
+            handleRegister() {
+                const name = document.getElementById('registerName').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const errorElement = document.getElementById('registerError');
+                const successElement = document.getElementById('registerSuccess');
+
+                // Clear previous messages
+                errorElement.textContent = '';
+                successElement.textContent = '';
+
+                // Validation
+                if (password !== confirmPassword) {
+                    errorElement.textContent = 'Passwords do not match';
+                    return;
+                }
+
+                if (password.length < 6) {
+                    errorElement.textContent = 'Password must be at least 6 characters long';
+                    return;
+                }
+
+                if (this.users[email]) {
+                    errorElement.textContent = 'An account with this email already exists';
+                    return;
+                }
+
+                // Create new user
+                const newUser = {
+                    name: name,
+                    email: email,
+                    password: password,
+                    registeredAt: new Date().toISOString()
+                };
+
+                this.users[email] = newUser;
+                successElement.textContent = 'Registration successful! You can now login.';
+
+                // Clear form
+                document.getElementById('registerFormElement').reset();
+
+                // Auto-switch to login form after 2 seconds
+                setTimeout(() => {
+                    this.showLoginForm();
+                }, 2000);
+            }
+
+            // Handle logout
+            handleLogout() {
+                this.currentUser = null;
+                this.showLoginForm();
+            }
+
+            // Show login form
+            showLoginForm() {
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('registerForm').classList.add('hidden');
+                document.getElementById('dashboard').classList.add('hidden');
+                
+                // Clear forms
+                document.getElementById('loginFormElement').reset();
+                document.getElementById('loginError').textContent = '';
+            }
+
+            // Show register form
+            showRegisterForm() {
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('registerForm').classList.remove('hidden');
+                document.getElementById('dashboard').classList.add('hidden');
+                
+                // Clear forms
+                document.getElementById('registerFormElement').reset();
+                document.getElementById('registerError').textContent = '';
+                document.getElementById('registerSuccess').textContent = '';
+            }
+
+            // Show dashboard
+            showDashboard() {
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('registerForm').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+
+                // Populate user information
+                document.getElementById('userName').textContent = this.currentUser.name;
+                document.getElementById('userEmail').textContent = this.currentUser.email;
+                document.getElementById('memberSince').textContent = new Date(this.currentUser.registeredAt).toLocaleDateString();
+            }
+
+            // Check authentication status on page load
+            checkAuthStatus() {
+                if (this.currentUser) {
+                    this.showDashboard();
+                } else {
+                    this.showLoginForm();
+                }
+            }
+        }
+
+        // Initialize the authentication system when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new AuthSystem();
+        });
+    </script>
+</body>
+</html>
